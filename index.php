@@ -79,6 +79,7 @@ switch ($pack->action) {
         }
         exit;
     case Action::DATA_REQUEST:
+        if (!$pack->invoker instanceof User) die(http_response_code(424));
         try {
             $data = json_encode($db->getData(), flags: JSON_THROW_ON_ERROR);
         } catch (JsonException $e) {
