@@ -10,6 +10,7 @@ enum Action: string {
     case REMIND_PASS = 'remind';
     case ERROR_MSG = 'emsg';
     case PROFILE_UPD = 'pupd';
+    case TOUR_DATA_REQUEST = 'tourdata';
 }
 
 class Package {

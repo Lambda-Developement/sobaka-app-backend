@@ -109,5 +109,18 @@ switch ($pack->action) {
         } finally {
             exit;
         }
+    case Action::TOUR_DATA_REQUEST:
+        if (!isset($pack->data)) die(http_response_code(406));
+        elseif (!isset($pack->data->id)) die(http_response_code(400));
+        elseif (!$pack->invoker instanceof User) die(http_response_code(424));
+        $id = $pack->data->id;
+        try {
+            $je = json_encode($db->getSources($id), flags: JSON_THROW_ON_ERROR);
+        } catch (ElementNotFoundException) {
+            die(http_response_code(417));
+        } catch (JsonException) {
+            die(http_response_code(510));
+        }
+        exit($je);
     default: die(http_response_code(405));
 }
