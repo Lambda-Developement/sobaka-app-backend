@@ -62,6 +62,15 @@ class Database extends mysqli implements DatabaseInterface {
         $q = self::query("SELECT lat, lon, description FROM points");
         return $q->fetch_all();
     }
+    public function getSources(int $tour_id): array {
+        $prep = self::prepare("SELECT audio, subtitles FROM points WHERE id = ?");
+        $prep->bind_param('i', $tour_id);
+        $prep->execute();
+        $r = $prep->get_result();
+        $prep->close();
+        if ($r->num_rows == 0) throw new ElementNotFoundException();
+        return $r->fetch_array(MYSQLI_NUM);
+    }
     public function insertErrorMessage(string $message, User $sender): void {
         $senderid = $sender->id;
         $prep = self::prepare("INSERT INTO error_messages(senderid, text) VALUES (?, ?)");

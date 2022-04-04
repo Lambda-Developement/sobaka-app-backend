@@ -8,6 +8,7 @@ interface DatabaseInterface {
     public function insertUser(string $email, string $name, string $hash): void;
     public function setUserPassword(string $email, string $hash): void;
     public function getData(): array;
+    public function getSources(int $tour_id): array;
     public function insertErrorMessage(string $message, User $sender): void;
     function __destruct();
 }
