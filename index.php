@@ -100,11 +100,10 @@ switch ($pack->action) {
         elseif (!isset($pack->data->mail)) die(http_response_code(400));
         $mail = $pack->data->mail;
         try {
-            $m = $db->getUserByLogin($mail);
             // TODO: Отправка сообщения о восстановлении
             // DEBUG: Пока не реализованы подтверждения
             $db->setUserPassword($mail, 12345);
-        } catch (DatabaseException $e) {
+        } catch (UserNotFoundException $e) {
             // do nothing -> follow for finally
         } finally {
             exit;
