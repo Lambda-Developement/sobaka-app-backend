@@ -118,7 +118,14 @@ switch ($pack->action) {
         elseif (!$pack->invoker instanceof User) die(http_response_code(424));
         $id = $pack->data->id;
         try {
-            $je = json_encode($db->getSources($id), flags: JSON_THROW_ON_ERROR);
+            $gs = $db->getSources($id);
+            $ra['audio'] = $gs[0];
+            $exp = explode('`]', $gs[1]);
+            foreach ($exp as &$el) {
+                $el = explode('`;', $el);
+            }
+            $ra['subtitles'] = $exp;
+            $je = json_encode($ra, flags: JSON_THROW_ON_ERROR);
         } catch (ElementNotFoundException) {
             die(http_response_code(417));
         } catch (JsonException) {
