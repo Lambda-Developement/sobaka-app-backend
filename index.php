@@ -97,8 +97,6 @@ switch ($pack->action) {
         $text = $pack->data->text;
         $db->insertErrorMessage($text, $pack->invoker);
         exit;
-    case Action::PROFILE_UPD:
-        die();
     case Action::REMIND_PASS:
         if (!isset($pack->data)) die(http_response_code(406));
         elseif (!isset($pack->data->mail)) die(http_response_code(400));
