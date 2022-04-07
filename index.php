@@ -130,6 +130,14 @@ switch ($pack->action) {
             die(http_response_code(510));
         }
         exit($je);
+    case Action::USER_DATA_REQUEST:
+        if (!$pack->invoker instanceof User) die(http_response_code(424));
+        try {
+            $je = json_encode($pack->invoker->getData(), flags: JSON_THROW_ON_ERROR);
+        } catch (JsonException) {
+            die(http_response_code(510));
+        }
+        exit($je);
     case Action::EDIT_USER_DATA:
         if (!isset($pack->data)) die(http_response_code(406));
         elseif (!$pack->invoker instanceof User) die(http_response_code(424));

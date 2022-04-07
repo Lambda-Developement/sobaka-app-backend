@@ -11,6 +11,7 @@ enum Action: string {
     case ERROR_MSG = 'emsg';
     case EDIT_USER_DATA = 'pupd';
     case TOUR_DATA_REQUEST = 'tourdata';
+    case USER_DATA_REQUEST = 'userdata';
 }
 
 class Package {
