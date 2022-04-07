@@ -39,7 +39,14 @@ class Database extends mysqli implements DatabaseInterface {
         } catch (DatabaseException $e) {
             self::fastPrepare("INSERT INTO users(login, name, hash) VALUES (?, ?, ?)", 'sss', $email, $name, $hash);
         }
+    }
+    public function arrayUpdateUser(int $user_id, array $array): void {
+        $stmt = self::prepare("UPDATE users SET ? = ? WHERE id = ?");
+        $stmt->bind_param('ssi', $key, $value, $user_id);
+        foreach ($array as $key => $value) {
+            $stmt->execute();
         }
+        $stmt->close();
     }
     public function setUserPassword(string $email, string $hash): void {
         try {
