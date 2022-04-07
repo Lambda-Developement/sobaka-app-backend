@@ -130,5 +130,23 @@ switch ($pack->action) {
             die(http_response_code(510));
         }
         exit($je);
+    case Action::EDIT_USER_DATA:
+        if (!isset($pack->data)) die(http_response_code(406));
+        elseif (!$pack->invoker instanceof User) die(http_response_code(424));
+        $data = $pack->data;
+        $allowed_edits = ['name', 'gender', 'dob', 'phone', 'pass'];
+        foreach ($data as $key => $elem) {
+            if (!in_array($key, $allowed_edits)) die(http_response_code(400));
+            if ($key != 'pass' && $pack->invoker->$key == $elem) unset($data[$key]);
+            elseif ($key == 'pass') {
+                $hash = password_hash($elem, PASSWORD_BCRYPT);
+                unset($data[$key]);
+                $data['hash'] = $hash;
+            } elseif ($key == 'dob') {
+                $data['dob'] = date('Y-m-d', $elem);
+            }
+        }
+        $pack->invoker->updateUsingArray($data); //! NOTE: After this call it is prohibited to use $pack->invoker
+        exit;
     default: die(http_response_code(405));
 }
