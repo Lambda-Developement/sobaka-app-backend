@@ -10,7 +10,7 @@ class Database extends mysqli implements DatabaseInterface {
     }
     private function fastPrepare(string $query, string $types, &$var1, &...$vars): mysqli_result {
         $prep = self::prepare($query);
-        $prep->bind_param($types, $var1, $vars);
+        $prep->bind_param($types, $var1, ...$vars);
         $prep->execute();
         $r = $prep->get_result();
         $prep->close();
