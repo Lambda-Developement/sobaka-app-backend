@@ -8,9 +8,9 @@ class Database extends mysqli implements DatabaseInterface {
         parent::__construct(Config::DB_URL, Config::DB_USER, Config::DB_PASS, Config::DB)
             or throw new DatabaseException("Unable to connect!");
     }
-    private function fastPrepare(string $query, string $types, &$var1, &...$vars): mysqli_result {
+    private function fastPrepare(string $query, string $types, &...$vars): mysqli_result|false {
         $prep = self::prepare($query);
-        $prep->bind_param($types, $var1, ...$vars);
+        $prep->bind_param($types, ...$vars);
         $prep->execute();
         $r = $prep->get_result();
         $prep->close();
