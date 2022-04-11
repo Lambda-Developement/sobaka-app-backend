@@ -19,7 +19,7 @@ class User {
             throw new DatabaseException($e->getMessage(), $e->getCode(), $e);
         }
         $this->id = $data['id'];
-        $this->avatar_loc = $data['avatar_loc'];
+        $this->avatar_loc = $data['avatarloc'];
         $this->name = $data['name'];
         $this->gender = $data['gender'];
         $this->dob = strtotime($data['dob']);
