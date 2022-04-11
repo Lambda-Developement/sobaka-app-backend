@@ -9,6 +9,8 @@ class Database extends mysqli implements DatabaseInterface {
             or throw new DatabaseException("Unable to connect!");
     }
     private function fastPrepare(string $query, string $types, &...$vars): mysqli_result|false {
+        if (count($vars) < 1) throw new InvalidArgumentException("Incorrect variable number!");
+        elseif (strlen($types) != count($vars)) throw new UnexpectedValueException("Types and vars count mismatch!");
         $prep = self::prepare($query);
         $prep->bind_param($types, ...$vars);
         $prep->execute();
