@@ -22,7 +22,7 @@ class User {
         $this->avatar_loc = $data['avatarloc'];
         $this->name = $data['name'];
         $this->gender = $data['gender'];
-        $this->dob = strtotime($data['dob']);
+        $this->dob = (!is_null($data['dob'])) ? strtotime($data['dob']) : NULL;
         $this->login = $data['login'];
         $this->phone = $data['phone'];
         /*$this->hash = $data['hash'];
