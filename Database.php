@@ -13,6 +13,7 @@ class Database extends mysqli implements DatabaseInterface {
         $prep->bind_param($types, ...$vars);
         $prep->execute();
         $r = $prep->get_result();
+        if ($prep->errno != 0) throw new DatabaseException($prep->error);
         $prep->close();
         return $r;
     }
