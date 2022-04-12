@@ -141,7 +141,7 @@ switch ($pack->action) {
     case Action::EDIT_USER_DATA:
         if (!isset($pack->data)) die(http_response_code(406));
         elseif (!$pack->invoker instanceof User) die(http_response_code(424));
-        $data = $pack->data;
+        $data = (array) $pack->data;
         $allowed_edits = ['name', 'gender', 'dob', 'phone', 'pass'];
         foreach ($data as $key => $elem) {
             if (!in_array($key, $allowed_edits)) die(http_response_code(400));
