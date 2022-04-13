@@ -156,5 +156,19 @@ switch ($pack->action) {
         }
         $pack->invoker->updateUsingArray($data); //! NOTE: After this call it is prohibited to use $pack->invoker
         exit;
+    case Action::CREATE_REVIEW:
+        if (!isset($pack->data)) die(http_response_code(406));
+        elseif (!isset($pack->data->id) || !isset($pack->data->mark)) die(http_response_code(400));
+        elseif (!$pack->invoker instanceof User) die(http_response_code(424));
+        $id = $pack->data->id;
+        $mark = $pack->data->mark;
+        if ($mark < 1 || $mark > 5) die(http_response_code(400));
+        $review = $pack->data->review ?? NULL;
+        try {
+            $db->insertReview($pack->invoker, $id, $mark, $review);
+        } catch (ElementNotFoundException $e) {
+            die(http_response_code(417));
+        }
+        exit;
     default: die(http_response_code(405));
 }
