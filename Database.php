@@ -72,6 +72,12 @@ class Database extends mysqli implements DatabaseInterface {
         $senderid = $sender->id;
         self::fastPrepare("INSERT INTO error_messages(senderid, text) VALUES (?, ?)", 'is', $senderid, $message);
     }
+    public function insertReview(User $author, int $tour_id, int $mark, ?string $review): void {
+        $pnr = self::fastPrepare("SELECT id FROM points WHERE id = ?", 'i', $tour_id)->num_rows;
+        if ($pnr != 1) throw new ElementNotFoundException();
+        $author_id = $author->id;
+        self::fastPrepare("INSERT INTO reviews(author, tour_id, mark, review) VALUES (?, ?, ?, ?)", 'iiis', $author_id, $tour_id, $mark, $review);
+    }
     function __destruct() {
         self::close();
     }

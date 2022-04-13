@@ -11,5 +11,6 @@ interface DatabaseInterface {
     public function getData(): array;
     public function getSources(int $tour_id): array;
     public function insertErrorMessage(string $message, User $sender): void;
+    public function insertReview(User $author, int $tour_id, int $mark, ?string $review): void;
     function __destruct();
 }
