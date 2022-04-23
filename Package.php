@@ -14,6 +14,7 @@ enum Action: string {
     case TOUR_DATA_REQUEST = 'tourdata';
     case USER_DATA_REQUEST = 'userdata';
     case CREATE_REVIEW = 'crrev';
+    case GET_REVIEWS = 'getrev';
 }
 
 class Package {

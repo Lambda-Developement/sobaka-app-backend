@@ -186,5 +186,36 @@ switch ($pack->action) {
             die(http_response_code(417));
         }
         exit;
+    case Action::GET_REVIEWS:
+        if (!isset($pack->data)) die(http_response_code(406));
+        elseif (!isset($pack->data->id)) die(http_response_code(400));
+        elseif (!$pack->invoker instanceof User) die(http_response_code(424));
+        $id = $pack->data->id;
+        try {
+            $r = $db->getReviews($id);
+        } catch (ElementNotFoundException $e) {
+            die(http_response_code(417));
+        }
+        $tot = 0;
+        $c = 0;
+        foreach ($r as $rev) {
+            $id = $rev[0];
+            try {
+                $u = $db->getUserByID($id);
+                $r[0] = [$u['name'], $u['avatarloc']];
+            } catch (DatabaseException $e) {
+                continue;
+            }
+            $tot += $rev[1];
+            $c++;
+        }
+        $x[1] = $r;
+        $x[0] = $tot / $c;
+        try {
+            $je = json_encode($x, flags: JSON_THROW_ON_ERROR);
+        } catch (JsonException $e) {
+            die(http_response_code(510));
+        }
+        exit($je);
     default: die(http_response_code(405));
 }
