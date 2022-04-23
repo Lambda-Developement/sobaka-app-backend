@@ -156,6 +156,22 @@ switch ($pack->action) {
         }
         $pack->invoker->updateUsingArray($data); //! NOTE: After this call it is prohibited to use $pack->invoker
         exit;
+    case Action::UPLOAD_PROFILE_PIC:
+        if (!isset($pack->image)) die(http_response_code(406));
+        elseif (!$pack->invoker instanceof User) die(http_response_code(424));
+        if ($pack->image['size'] == 0) die(http_response_code(400));
+        elseif ($pack->image['error'] != UPLOAD_ERR_OK) die(http_response_code(400));
+        if (is_uploaded_file($pack->image['tmp_name'])) {
+            if ($pack->invoker->avatar_loc != NULL) {
+                // delete old avatar
+                unlink($pack->invoker->avatar_loc);
+                //! NOTE: Avatar location stored in User object is not correct anymore
+            }
+            $target = 'avatars/'.$pack->invoker->id."_".bin2hex(random_bytes(5));
+            move_uploaded_file($pack->image['tmp_name'], $target);
+            $db->updateAvatarLocation($pack->invoker->id, $target);
+        } else die(http_response_code(400));
+        exit;
     case Action::CREATE_REVIEW:
         if (!isset($pack->data)) die(http_response_code(406));
         elseif (!isset($pack->data->id) || !isset($pack->data->mark)) die(http_response_code(400));

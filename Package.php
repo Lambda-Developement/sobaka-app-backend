@@ -10,6 +10,7 @@ enum Action: string {
     case REMIND_PASS = 'remind';
     case ERROR_MSG = 'emsg';
     case EDIT_USER_DATA = 'pupd';
+    case UPLOAD_PROFILE_PIC = 'picupd';
     case TOUR_DATA_REQUEST = 'tourdata';
     case USER_DATA_REQUEST = 'userdata';
     case CREATE_REVIEW = 'crrev';
