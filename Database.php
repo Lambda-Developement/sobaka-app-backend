@@ -56,6 +56,9 @@ class Database extends mysqli implements DatabaseInterface {
         }
         $stmt->close();
     }
+    public function updateAvatarLocation(int $user_id, string $new_location): void {
+        self::fastPrepare("UPDATE users SET avatarloc = ? WHERE id = ?", 'si', $new_location, $user_id);
+    }
     public function setUserPassword(string $email, string $hash): void {
         try {
             $this->getUserByLogin($email);
