@@ -217,5 +217,14 @@ switch ($pack->action) {
             die(http_response_code(510));
         }
         exit($je);
+    case Action::GET_ROUTES:
+        if (!$pack->invoker instanceof User) die(http_response_code(424));
+        $d = $db->getRoutes();
+        try {
+            $je = json_encode($d, flags: JSON_THROW_ON_ERROR);
+        } catch (JsonException) {
+            die(http_response_code(510));
+        }
+        exit($je);
     default: die(http_response_code(405));
 }
