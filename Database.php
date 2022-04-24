@@ -48,12 +48,12 @@ class Database extends mysqli implements DatabaseInterface {
     public function assignKeyToUserID(string $key, int $user_id): void {
         self::fastPrepare("UPDATE users SET loginkey = ? WHERE id = ?", 'ss', $key, $user_id);
     }
-    public function insertUser(string $email, string $name, string $hash): void {
+    public function insertUser(string $email, string $name, string $hash, string $mail_conf): void {
         try {
             $this->getUserByLogin($email);
             throw new UserAlreadyRegisteredException();
         } catch (DatabaseException $e) {
-            self::fastPrepare("INSERT INTO users(login, name, hash) VALUES (?, ?, ?)", 'sss', $email, $name, $hash);
+            self::fastPrepare("INSERT INTO users(login, name, hash, confkey) VALUES (?, ?, ?, ?)", 'ssss', $email, $name, $hash, $mail_conf);
         }
     }
     public function arrayUpdateUser(int $user_id, array $array): void {
