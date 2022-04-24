@@ -103,6 +103,9 @@ class Database extends mysqli implements DatabaseInterface {
         $q = self::query("SELECT * FROM routes");
         return $q->fetch_all();
     }
+    public function activateUser(int $user_id): void {
+        self::fastPrepare("UPDATE users SET confkey = NULL, confirmed = 1 WHERE id = ?", 'i', $user_id);
+    }
     function __destruct() {
         self::close();
     }

@@ -18,5 +18,6 @@ interface DatabaseInterface {
     public function insertReview(User $author, int $tour_id, int $mark, ?string $review): void;
     public function getReviews(int $tour_id): array;
     public function getRoutes(): array;
+    public function activateUser(int $user_id): void;
     function __destruct();
 }
