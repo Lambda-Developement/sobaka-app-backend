@@ -15,7 +15,9 @@ class Keys {
                 throw new KeyGeneratorException("Unable to generate random bytes!");
             }
             $r = $db->getLoginKeyUsage($g);
-        } while ($r != 0);
+            $x = $db->getConfirmationKeyUsage($g);
+            $t = $r + $x;
+        } while ($t != 0);
         return $g;
     }
     /**
