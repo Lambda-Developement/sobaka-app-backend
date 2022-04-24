@@ -91,6 +91,18 @@ switch ($pack->action) {
             die(http_response_code(523));
         }
         exit;
+    case Action::REG_CONF:
+        if (!isset($pack->data)) die(http_response_code(406));
+        elseif (!isset($pack->data->conf)) die(http_response_code(400));
+        $key = $pack->data->conf;
+        if ($db->getConfirmationKeyUsage($key) != 1) die(http_response_code(417));
+        try {
+            $u = $db->getUserByConfKey($key);
+        } catch (DatabaseException) {
+            die(http_response_code(417));
+        }
+        $db->activateUser($u['id']);
+        exit;
     case Action::DATA_REQUEST:
         if (!$pack->invoker instanceof User) die(http_response_code(424));
         try {

@@ -6,6 +6,7 @@ enum Action: string {
     case LOGIN = 'login';
     case VALIDATE_KEY = 'kval';
     case REGISTER = 'reg';
+    case REG_CONF = 'regconf';
     case DATA_REQUEST = 'data';
     case REMIND_PASS = 'remind';
     case ERROR_MSG = 'emsg';
