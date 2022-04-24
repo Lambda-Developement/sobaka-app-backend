@@ -71,16 +71,24 @@ switch ($pack->action) {
         if (!isset($pack->data)) die(http_response_code(406));
         elseif (!isset($pack->data->name) || !isset($pack->data->mail) || !isset($pack->data->pass)) die(http_response_code(400));
         // TODO: Отправка подтверждения регистрации
-        //$mail = new MailSender();
         $data = $pack->data;
         $name = $data->name;
         $mail = $data->mail;
         $pass = $data->pass;
         $hash = password_hash($pass, PASSWORD_BCRYPT);
         try {
-            $db->insertUser($mail, $name, $hash);
+            $key = Keys::generateKey();
+            (new MailSender())->setHTML()
+                ->addAddress($mail)
+                ->setBody(file_get_contents('mailassets/email.html') . "<a href='http://io.cordova.tripar/mail/{$key}'>http://io.cordova.tripar/mail/{$key}</a>" . file_get_contents('mailassets/email2.html'))
+                ->setSubject("Подтверждение регистрации в Trip AR")
+                ->setAltBody("Вы успешно зарегистрировались! Для подтверждения перейдите по ссылке http://io.cordova.tripar/mail/{$key}")
+                ->send();
+            $db->insertUser($mail, $name, $hash, $key);
         } catch (UserAlreadyRegisteredException) {
             die(http_response_code(409));
+        } catch (MailSendFailedException) {
+            die(http_response_code(523));
         }
         exit;
     case Action::DATA_REQUEST:
