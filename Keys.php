@@ -21,15 +21,21 @@ class Keys {
     /**
      * @throws KeyGeneratorException If unable to use random_bytes function
      */
-    public static function assign(User|int $user): string {
-        $db = new Database();
-        if ($user instanceof User) $user = $user->id;
+    public static function generateKey(): string {
         try {
             $key = self::generate();
         } catch (KeyGeneratorException $e) {
             throw new KeyGeneratorException($e->getMessage(), $e->getCode(), $e);
         }
-        $db->assignKeyToUserID($key, $user);
+        return $key;
+    }
+    /**
+     * @throws KeyGeneratorException If unable to use random_bytes function
+     */
+    public static function assignLoginKey(User|int $user): string {
+        $key = self::generateKey();
+        if ($user instanceof User) $user = $user->id;
+        (new Database())->assignKeyToUserID($key, $user);
         return $key;
     }
 }
