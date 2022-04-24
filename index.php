@@ -44,13 +44,14 @@ switch ($pack->action) {
         } catch (DatabaseException) {
             die(http_response_code(417));
         }
+        if ($udata['confirmed'] == 0) die(http_response_code(402));
         $hash = $udata['hash'];
         $passwd = $pack->data->pass;
         if (!password_verify($passwd, $hash)) {
             die(http_response_code(401));
         }
         try {
-            $key = Keys::assign($udata['id']);
+            $key = Keys::assignLoginKey($udata['id']);
         } catch (KeyGeneratorException $e) {
             Logger::log($e->getMessage());
             die(http_response_code(503));
