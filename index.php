@@ -231,7 +231,7 @@ switch ($pack->action) {
             $c++;
         }
         $x[1] = $r;
-        $x[0] = $tot / $c;
+        $x[0] = ($c != 0) ? $tot / $c : 0;
         try {
             $je = json_encode($x, flags: JSON_THROW_ON_ERROR);
         } catch (JsonException $e) {
