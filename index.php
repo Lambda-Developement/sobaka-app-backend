@@ -195,14 +195,16 @@ switch ($pack->action) {
         exit;
     case Action::CREATE_REVIEW:
         if (!isset($pack->data)) die(http_response_code(406));
-        elseif (!isset($pack->data->id) || !isset($pack->data->mark)) die(http_response_code(400));
+        elseif (!isset($pack->data->id) || !isset($pack->data->mark) || !isset($pack->data->type)) die(http_response_code(400));
         elseif (!$pack->invoker instanceof User) die(http_response_code(424));
+        elseif ($pack->data->type != 0 && $pack->data->type != 1) die(http_response_code(400));
         $id = $pack->data->id;
         $mark = $pack->data->mark;
         if ($mark < 1 || $mark > 5) die(http_response_code(400));
         $review = $pack->data->review ?? NULL;
         try {
-            $db->insertReview($pack->invoker, $id, $mark, $review);
+            if ($pack->data->type == 0) $db->insertReview($pack->invoker, $id, $mark, $review);
+            else $db->insertRouteReview($pack->invoker, $id, $mark, $review);
         } catch (ElementNotFoundException $e) {
             die(http_response_code(417));
         }
