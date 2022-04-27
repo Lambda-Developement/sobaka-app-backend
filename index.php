@@ -183,12 +183,14 @@ switch ($pack->action) {
         if ($pack->image['size'] == 0) die(http_response_code(400));
         elseif ($pack->image['error'] != UPLOAD_ERR_OK) die(http_response_code(400));
         if (is_uploaded_file($pack->image['tmp_name'])) {
+            $ext = ".".pathinfo($pack->image['name'], PATHINFO_EXTENSION);
+            if ($ext != '.png' && $ext != '.jpg' && $ext != '.jpeg') die(http_response_code(400));
             if ($pack->invoker->avatar_loc != NULL) {
                 // delete old avatar
                 unlink($pack->invoker->avatar_loc);
                 //! NOTE: Avatar location stored in User object is not correct anymore
             }
-            $target = 'avatars/'.$pack->invoker->id."_".bin2hex(random_bytes(5));
+            $target = 'avatars/'.$pack->invoker->id."_".bin2hex(random_bytes(5)).$ext;
             move_uploaded_file($pack->image['tmp_name'], $target);
             $db->updateAvatarLocation($pack->invoker->id, $target);
         } else die(http_response_code(400));
