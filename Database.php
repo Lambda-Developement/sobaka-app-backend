@@ -94,6 +94,12 @@ class Database extends mysqli implements DatabaseInterface {
         $author_id = $author->id;
         self::fastPrepare("INSERT INTO reviews(author, tour_id, mark, review) VALUES (?, ?, ?, ?)", 'iiis', $author_id, $tour_id, $mark, $review);
     }
+    public function insertRouteReview(User $author, int $route_id, int $mark, ?string $review): void {
+        $pnr = self::fastPrepare("SELECT id FROM routes WHERE id = ?", 'i', $route_id)->num_rows;
+        if ($pnr != 1) throw new ElementNotFoundException();
+        $author_id = $author->id;
+        self::fastPrepare("INSERT INTO reviewsrte(author, route_id, mark, review) VALUES (?, ?, ?, ?)", "iiis", $author_id, $route_id, $mark, $review);
+    }
     public function getReviews(int $tour_id): array {
         $pnr = self::fastPrepare("SELECT id FROM points WHERE id = ?", 'i', $tour_id)->num_rows;
         if ($pnr != 1) throw new ElementNotFoundException();
