@@ -10,6 +10,7 @@ interface DatabaseInterface {
     public function getConfirmationKeyUsage(string $key): int;
     public function getRemindKeyUsage(string $key): int;
     public function assignKeyToUserID(string $key, int $user_id): void;
+    public function assignRemindKeyToUserID(string $key, int $user_id): void;
     public function insertUser(string $email, string $name, string $hash, string $mail_conf): void;
     public function arrayUpdateUser(int $user_id, array $array): void;
     public function updateAvatarLocation(int $user_id, string $new_location): void;

@@ -56,6 +56,9 @@ class Database extends mysqli implements DatabaseInterface {
     public function assignKeyToUserID(string $key, int $user_id): void {
         self::fastPrepare("UPDATE users SET loginkey = ? WHERE id = ?", 'si', $key, $user_id);
     }
+    public function assignRemindKeyToUserID(string $key, int $user_id): void {
+        self::fastPrepare("UPDATE users SET remindkey = ? WHERE id = ?", 'si', $key, $user_id);
+    }
     public function insertUser(string $email, string $name, string $hash, string $mail_conf): void {
         try {
             $this->getUserByLogin($email);
