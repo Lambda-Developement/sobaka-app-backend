@@ -57,12 +57,9 @@ class Database extends mysqli implements DatabaseInterface {
         }
     }
     public function arrayUpdateUser(int $user_id, array $array): void {
-        $stmt = self::prepare("UPDATE users SET ? = ? WHERE id = ?");
-        $stmt->bind_param('ssi', $key, $value, $user_id);
         foreach ($array as $key => $value) {
-            $stmt->execute();
+            self::fastPrepare("UPDATE users SET `$key` = ? WHERE id = ?", 'si', $value, $user_id);
         }
-        $stmt->close();
     }
     public function updateAvatarLocation(int $user_id, string $new_location): void {
         self::fastPrepare("UPDATE users SET avatarloc = ? WHERE id = ?", 'si', $new_location, $user_id);
