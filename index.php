@@ -213,21 +213,22 @@ switch ($pack->action) {
         exit;
     case Action::GET_REVIEWS:
         if (!isset($pack->data)) die(http_response_code(406));
-        elseif (!isset($pack->data->id)) die(http_response_code(400));
+        elseif (!isset($pack->data->id) || !isset($pack->data->type)) die(http_response_code(400));
         elseif (!$pack->invoker instanceof User) die(http_response_code(424));
         $id = $pack->data->id;
         try {
-            $r = $db->getReviews($id);
+            if ($pack->data->type == 0) $r = $db->getReviews($id);
+            else $r = $db->getRouteReviews($id);
         } catch (ElementNotFoundException $e) {
             die(http_response_code(417));
         }
         $tot = 0;
         $c = 0;
-        foreach ($r as $rev) {
+        foreach ($r as &$rev) {
             $id = $rev[0];
             try {
                 $u = $db->getUserByID($id);
-                $r[0] = [$u['name'], $u['avatarloc']];
+                $rev[0] = [$u['name'], $u['avatarloc']];
             } catch (DatabaseException $e) {
                 continue;
             }
