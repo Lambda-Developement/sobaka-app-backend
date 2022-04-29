@@ -54,7 +54,7 @@ class Database extends mysqli implements DatabaseInterface {
         return self::fastPrepare("SELECT id FROM users WHERE remindkey = ?", 's', $key)->num_rows;
     }
     public function assignKeyToUserID(string $key, int $user_id): void {
-        self::fastPrepare("UPDATE users SET loginkey = ? WHERE id = ?", 'ss', $key, $user_id);
+        self::fastPrepare("UPDATE users SET loginkey = ? WHERE id = ?", 'si', $key, $user_id);
     }
     public function insertUser(string $email, string $name, string $hash, string $mail_conf): void {
         try {
