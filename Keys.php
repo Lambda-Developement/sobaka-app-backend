@@ -41,4 +41,13 @@ class Keys {
         (new Database())->assignKeyToUserID($key, $user);
         return $key;
     }
+    /**
+     * @throws KeyGeneratorException If unable to use random_bytes function
+     */
+    public static function assignRemindKey(User|int $user): string {
+        $key = self::generateKey();
+        if ($user instanceof User) $user = $user->id;
+        (new Database())->assignRemindKeyToUserID($key, $user);
+        return $key;
+    }
 }
