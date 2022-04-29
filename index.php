@@ -124,13 +124,35 @@ switch ($pack->action) {
         $mail = $pack->data->mail;
         try {
             // TODO: Отправка сообщения о восстановлении
-            // DEBUG: Пока не реализованы подтверждения
-            $db->setUserPassword($mail, 12345);
-        } catch (UserNotFoundException $e) {
+            $d = $db->getUserByLogin($mail);
+            $key = Keys::assignRemindKey($d['id']);
+            (new MailSender())->addAddress($mail)
+                ->setBody("http://io.cordova.tripar/password/{$key}")
+                ->setSubject("Восстановление пароля в Trip AR")
+                //->setAltBody("Вы успешно зарегистрировались! Для подтверждения перейдите по ссылке http://io.cordova.tripar/mail/{$key}")
+                ->send();
+        } catch (DatabaseException $e) {
             // do nothing -> follow for finally
         } finally {
             exit;
         }
+    case Action::REMIND_CONF:
+        if (!isset($pack->data)) die(http_response_code(406));
+        elseif (!isset($pack->data->conf) || !isset($pack->data->pass)) die(http_response_code(400));
+        $key = $pack->data->conf;
+        if ($db->getRemindKeyUsage($key) != 1) die(http_response_code(417));
+        try {
+            $u = $db->getUserByRemindKey($key);
+        } catch (DatabaseException) {
+            die(http_response_code(417));
+        }
+        $hash = password_hash($pack->data->pass, PASSWORD_BCRYPT);
+        try {
+            $db->setUserPassword($u['login'], $hash);
+        } catch (UserNotFoundException $e) {
+            die(http_response_code(417));
+        }
+        exit;
     case Action::TOUR_DATA_REQUEST:
         if (!isset($pack->data)) die(http_response_code(406));
         elseif (!isset($pack->data->id)) die(http_response_code(400));
