@@ -78,7 +78,7 @@ class Database extends mysqli implements DatabaseInterface {
         } catch (DatabaseException $e) {
             throw new UserNotFoundException(previous: $e);
         }
-        self::fastPrepare("UPDATE users SET hash = ? WHERE login = ?", 'ss', $hash, $email);
+        self::fastPrepare("UPDATE users SET hash = ?, remindkey = NULL WHERE login = ?", 'ss', $hash, $email);
     }
     public function getData(): array {
         $q = self::query("SELECT lat, lon, description FROM points");
