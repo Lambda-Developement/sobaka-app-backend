@@ -9,6 +9,7 @@ enum Action: string {
     case REG_CONF = 'regconf';
     case DATA_REQUEST = 'data';
     case REMIND_PASS = 'remind';
+    case REMIND_CONF = 'remindconf';
     case ERROR_MSG = 'emsg';
     case EDIT_USER_DATA = 'pupd';
     case UPLOAD_PROFILE_PIC = 'picupd';
