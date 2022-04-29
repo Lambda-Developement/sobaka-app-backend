@@ -50,6 +50,9 @@ class Database extends mysqli implements DatabaseInterface {
     public function getConfirmationKeyUsage(string $key): int {
         return self::fastPrepare("SELECT id FROM users WHERE confkey = ?", 's', $key)->num_rows;
     }
+    public function getRemindKeyUsage(string $key): int {
+        return self::fastPrepare("SELECT id FROM users WHERE remindkey = ?", 's', $key)->num_rows;
+    }
     public function assignKeyToUserID(string $key, int $user_id): void {
         self::fastPrepare("UPDATE users SET loginkey = ? WHERE id = ?", 'ss', $key, $user_id);
     }
