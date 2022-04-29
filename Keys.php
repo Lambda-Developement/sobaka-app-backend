@@ -16,7 +16,8 @@ class Keys {
             }
             $r = $db->getLoginKeyUsage($g);
             $x = $db->getConfirmationKeyUsage($g);
-            $t = $r + $x;
+            $y = $db->getRemindKeyUsage($g);
+            $t = $r + $x + $y;
         } while ($t != 0);
         return $g;
     }
