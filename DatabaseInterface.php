@@ -5,6 +5,7 @@ interface DatabaseInterface {
     public function getUserByKey(string $key): array;
     public function getUserByID(int $id): array;
     public function getUserByConfKey(string $key): array;
+    public function getUserByRemindKey(string $key): array;
     public function getLoginKeyUsage(string $key): int;
     public function getConfirmationKeyUsage(string $key): int;
     public function assignKeyToUserID(string $key, int $user_id): void;

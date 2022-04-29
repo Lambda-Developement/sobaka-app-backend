@@ -39,6 +39,11 @@ class Database extends mysqli implements DatabaseInterface {
         if ($f->num_rows != 1) throw new DatabaseException("User does not exists!");
         return $f->fetch_assoc();
     }
+    public function getUserByRemindKey(string $key): array {
+        $f = self::fastPrepare("SELECT * FROM users WHERE remindkey = ?", 's', $key);
+        if ($f->num_rows != 1) throw new DatabaseException("User does not exists!");
+        return $f->fetch_assoc();
+    }
     public function getLoginKeyUsage(string $key): int {
         return self::fastPrepare("SELECT id FROM users WHERE loginkey = ?", 's', $key)->num_rows;
     }
