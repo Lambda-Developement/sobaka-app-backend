@@ -114,7 +114,7 @@ class Database extends mysqli implements DatabaseInterface {
         return self::fastPrepare("SELECT author, mark, review FROM reviews WHERE tour_id = ?", 'i', $tour_id)->fetch_all();
     }
     public function getRouteReviews(int $route_id): array {
-        $pnr = self::fastPrepare("SELECT id FROM routes WHERE id = ?", 'i', $tour_id)->num_rows;
+        $pnr = self::fastPrepare("SELECT id FROM routes WHERE id = ?", 'i', $route_id)->num_rows;
         if ($pnr != 1) throw new ElementNotFoundException();
         return self::fastPrepare("SELECT author, mark, review FROM reviewsrte WHERE route_id = ?", 'i', $tour_id)->fetch_all();
     }
