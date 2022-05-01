@@ -84,7 +84,7 @@ class Database extends mysqli implements DatabaseInterface {
         self::fastPrepare("UPDATE users SET hash = ?, remindkey = NULL WHERE login = ?", 'ss', $hash, $email);
     }
     public function getData(): array {
-        $q = self::query("SELECT lat, lon, `description`, address, image FROM points");
+        $q = self::query("SELECT lat, lon, `description`, detailed, address, image FROM points");
         return $q->fetch_all();
     }
     public function getSources(int $tour_id): array {
